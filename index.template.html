@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SKÅDIS Shelf Studio</title>
+<meta name="description" content="Design a custom SKÅDIS shelf with simple size controls, a live 3D preview, and STL or 3MF downloads.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a52ef'/%3E%3Cpath d='M7 9v13h18V9M7 17h18' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+<style>/* STYLES */</style>
+</head>
+<body>
+<header class="app-header"><a class="brand" href="#"><span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M7 9v13h18V9M7 17h18"/></svg></span><span>SKÅDIS <b>Shelf Studio</b></span></a><span class="header-note">A shelf that fits your space.</span><button class="quiet" id="helpBtn">How to print</button></header>
+<main class="workspace">
+<aside class="controls" aria-label="Shelf design controls">
+<div class="panel-title"><div><span class="eyebrow">DESIGN YOUR SHELF</span><h1>Make room for it.</h1></div><button id="reset" class="quiet" title="Reset all settings">Reset</button></div>
+<section aria-labelledby="printerHeading"><div class="section-heading"><h2 id="printerHeading">Printer build volume</h2><span class="pill">millimeters</span></div><p class="hint">Enter your printer’s usable width, depth, and height.</p><div class="three-col" id="bedControls"></div><p class="hint printer-note">Fit checks include hooks and brackets, upright or turned 90° on the bed.</p></section>
+<section><h2><span class="step">1</span> Choose a style</h2><div class="style-grid" role="group" aria-label="Shelf style">
+<button data-style="flat" class="style"><svg viewBox="0 0 80 46" aria-hidden="true"><path d="M13 13v20l42 5 14-12-42-5M13 33l14-12V6M27 21l42 5"/></svg><b>Flat shelf</b><span>Open edges</span></button>
+<button data-style="tray" class="style active" aria-pressed="true"><svg viewBox="0 0 80 46" aria-hidden="true"><path d="M13 12v20l42 6 14-13V13l-42-6-14 5 42 6 14-5M55 18v20M13 22l42 6 14-13M27 7v14"/></svg><b>Tray</b><span>Raised edges</span></button>
+<button data-style="rounded" class="style"><svg viewBox="0 0 80 46" aria-hidden="true"><path d="M13 13v15q0 5 8 6l28 4q6 1 11-4l7-7q2-2 2-6V14q0-2-7-3L30 7q-5-1-10 2l-7 4 38 5q5 1 9-2l9-2M54 18v20M13 23l36 5q6 1 11-4l9-8"/></svg><b>Rounded</b><span>Soft corners</span></button>
+<button data-style="semicircle" class="style"><svg viewBox="0 0 80 46" aria-hidden="true"><path d="M14 11v17l49 5V18L14 11M14 28c-14 18 47 21 49 5M14 23c-14 18 47 21 49 5"/></svg><b>Half-round</b><span>Curved front</span></button>
+<button data-style="openbin" class="style"><svg viewBox="0 0 80 46" aria-hidden="true"><path d="M15 8v29l40 5 13-12V9L29 4 15 8l40 6 13-5M55 14v28M29 4v23L15 37M29 27l39 3"/></svg><b>Open bin</b><span>Easy access</span></button>
+<button data-style="cup" class="style"><svg viewBox="0 0 80 46" aria-hidden="true"><ellipse cx="40" cy="12" rx="22" ry="7"/><path d="M18 12v23c0 10 44 10 44 0V12"/><ellipse cx="40" cy="12" rx="17" ry="4"/></svg><b>Cup</b><span>Round or oval</span></button>
+<button data-style="phone" class="style"><svg viewBox="0 0 80 46" aria-hidden="true"><path d="M16 9v30l45 4 8-11-44-5-9 12M25 27l4-23 32 4-4 23M23 34l35 4 5-5M58 38v5"/></svg><b>Phone stand</b><span>Cable opening</span></button>
+<button data-style="holder" class="style"><svg viewBox="0 0 80 46" aria-hidden="true"><path d="M13 10v22l43 7 13-12-43-7M13 32l13-12V5"/><ellipse cx="31" cy="28" rx="7" ry="3"/><ellipse cx="49" cy="30" rx="7" ry="3"/></svg><b>Tool holder</b><span>Sized openings</span></button>
+<button data-style="tilted" class="style"><svg viewBox="0 0 80 46" aria-hidden="true"><path d="M15 7v28l40-11 12-11-42 11-10 11M55 24v-6l12-11v6M15 35l40-11M25 24V4"/></svg><b>Tilted shelf</b><span>Display angle</span></button>
+</div><p class="hint style-note" id="styleDescription">Raised edges keep small things contained.</p></section>
+<section><div class="section-heading"><h2><span class="step">2</span> Set the size</h2><span class="pill">millimeters</span></div><p class="hint">Outside shelf dimensions. Hooks add depth at the back.</p><div id="sizeControls"></div>
+<div id="radiusControl"></div>
+<div id="styleControls"></div>
+<div class="inside"><span>Usable inside space</span><strong id="insideSize">—</strong><small id="insideNote">—</small></div>
+</section>
+<section><h2><span class="step">3</span> Make it yours</h2><div class="two-col"><div id="wallControl"></div><div id="floorControl"></div></div>
+<label class="select-label" for="compartments">Compartments <select id="compartments"><option value="1">One open space</option><option value="2">2 compartments</option><option value="3">3 compartments</option><option value="4">4 compartments</option><option value="5">5 compartments</option></select></label>
+<label class="check-row"><span><b>Corner braces</b><small>Reinforce the two back corners</small></span><input id="braces" type="checkbox" checked></label>
+</section>
+<section><h2><span class="step">4</span> Mounting hooks</h2>
+<label class="select-label" for="hookType">Hook type <select id="hookType"><option value="standard">Standard drop-in</option><option value="tapered">Tapered tips</option><option value="double">Two rows</option></select></label>
+<p class="hint" id="hookDescription">Insert the hooks, then slide down to seat them.</p>
+<label class="select-label" for="hookCount">Total hooks <select id="hookCount"><option value="0">Automatic</option></select></label><p class="hint" id="hookCountNote">—</p>
+</section>
+<section><h2><span class="step">5</span> Support underneath</h2><label class="check-row"><span><b>Add triangular brackets</b><small>Support deeper shelves from below</small></span><input id="bottomSupports" type="checkbox"></label><div id="supportOptions" hidden>
+<label class="select-label" for="supportCount">Brackets <select id="supportCount"><option value="1">1 bracket</option><option value="2">2 brackets</option><option value="3">3 brackets</option><option value="4">4 brackets</option></select></label><div id="supportControls"></div><p class="hint">Height is the drop below the shelf; reach is the length underneath. Brackets are fused into the model. They are shelf parts, separate from removable supports generated by your slicer.</p></div></section>
+<details class="advanced"><summary>Board fit settings <span>+</span></summary><p class="hint">Printed boards can vary. Measure yours, then print the hook test below.</p><div id="mountControls"></div><p class="hint">Spacing is the distance between slot centers in the same row. For two-row hooks, measure vertically between slots in the same column. Defaults assume 5 × 15 mm slots and a 5 mm board. Hook insertion height is <b id="insertionHeight">11.2 mm</b>; your slot must be taller than this.</p></details>
+<div class="fit-tip"><span class="fit-symbol" aria-hidden="true">◎</span><div><b>First print? Check the fit.</b><p>A small two-hook test uses your current mounting settings.</p><button id="testDownload" class="text-btn">Download hook test · STL</button></div></div>
+</aside>
+<section class="preview-panel" aria-label="3D shelf preview">
+<div class="preview-heading"><div><span class="eyebrow">LIVE PREVIEW</span><h2 id="previewTitle">Your custom tray</h2></div><span class="preview-tag" id="meshStatus">Building model…</span></div>
+<div class="viewport" id="viewport"><div id="viewer"></div><div class="view-tools" role="group" aria-label="Preview angle"><button data-view="iso" class="active">3D</button><button data-view="top">Top</button><button data-view="back">Hooks</button><button data-view="under">Under</button></div><div class="preview-help">Drag to rotate · Scroll or pinch to zoom</div><div class="viewer-error" id="viewerError" hidden></div></div>
+<div class="measure-strip"><div><span>Overall model</span><b id="overallSize">—</b></div><div><span>Mounting</span><b id="mountSummary">—</b></div><div><span>Selected printer</span><b id="bedStatus">—</b><small id="bedVolume">260 × 260 × 255 mm</small></div></div>
+<div class="export-panel"><div class="export-copy"><span class="eyebrow">READY FOR YOUR SLICER</span><h2>From your screen to your wall.</h2><p>Download the model, open it in your slicer, and slice for your printer.</p></div><div class="download-group"><button class="primary" id="download3mf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Download 3MF</button><button class="secondary" id="downloadStl">Download STL</button></div></div>
+<div class="notice" id="modelNotice" role="status">Checking your design…</div>
+<div id="supportSummary" class="support-summary" hidden></div>
+<p class="footnote">Model files only; choose your print settings in the slicer. Hook fit and carrying capacity need a physical test.</p>
+</section>
+</main>
+<dialog id="helpDialog"><div class="dialog-header"><h2>Print your first shelf</h2><button id="closeHelp" class="quiet" aria-label="Close printing guide">✕</button></div><ol><li><b>Check the hooks first.</b> The small test uses your selected hook type and board spacing. Two-row mode tests both rows. Insert the tails, then slide down to seat them. Measure the slot pattern and adjust the fit if needed.</li><li><b>Download your shelf.</b> 3MF keeps the model's millimeter units. If your app does not accept the 3MF, use STL and import it in millimeters.</li><li><b>Slice for your printer.</b> Select your printer and filament. A starting point is 0.20 mm layers, 4 walls, and 20–30% infill. Inspect the sliced preview and add removable supports where needed.</li><li><b>Check the print orientation.</b> Structural brackets underneath belong to your shelf. They can leave the shelf floor above the build plate and require substantial slicer supports. You can rotate the model onto a side or back in your slicer, then inspect hook and wall overhangs. The tool does not choose the best print orientation.</li><li><b>Test before loading it.</b> Check that every hook fully seats and the board is secured to the wall. Test a small load first. More hooks and brackets do not establish a weight rating.</li></ol><p class="hint">Exports put the lowest point at Z = 0. Blue is the preview color; choose your actual filament in the slicer. No multicolor setup or prime tower is required.</p><button class="primary" id="gotIt">Got it</button></dialog>
+<div id="toast" role="status" hidden></div>
+<button id="jumpPreview" class="mobile-preview-jump" hidden>Preview & download</button>
+<footer>Independent maker tool · Not affiliated with IKEA <span>Works in your browser. No account needed.</span></footer>
+<script>/* APP */</script>
+</body></html>
